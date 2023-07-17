@@ -1,4 +1,5 @@
 import { productsModel } from "../../../Interfaces";
+import { Link } from "react-router-dom"
 
 interface Props {
     productItem: productsModel;
@@ -13,12 +14,14 @@ const ProductCard = (props: Props) => {
       >
         <div className="card-body pt-2">
           <div className="row col-10 offset-1 p-4">
-            <img
-              src={props.productItem.image}
-              style={{ borderRadius: "50%" }}
-              alt=""
-              className="w-100 mt-5 image-box"
-            />
+            <Link to={`/ProductDetails/${props.productItem.id}`}>
+              <img
+                src={props.productItem.image}
+                style={{ borderRadius: "50%" }}
+                alt=""
+                className="w-100 mt-5 image-box"
+              />
+            </Link>
           </div>
         {props.productItem.specialTag && props.productItem.specialTag.length > 0 && (
         <i
@@ -52,7 +55,9 @@ const ProductCard = (props: Props) => {
           ></i>
 
           <div className="text-center">
+          <Link to={`/ProductDetails/${props.productItem.id}`} style={{ textDecoration: "none" }}>
             <p className="card-title m-0 text-success fs-3">{props.productItem.name}</p>
+          </Link>
             <p className="badge bg-secondary" style={{ fontSize: "12px" }}>
               {props.productItem.category}
             </p>
