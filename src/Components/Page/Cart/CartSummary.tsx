@@ -1,8 +1,13 @@
-import { useSelector } from "react-redux"
+import { useSelector, useDispatch } from "react-redux"
 import { cartItemModel } from "../../../Interfaces"
 import { RootState } from "../../../Storage/Redux/store";
+import { removeFromCart, updateQuantity} from "../../../Storage/Redux/shoppingCartSlice";
+import { useUpdateShoppingCartMutation } from "../../../APIs/shoppingCartAPI";
 
 const CartSummary = () => {
+  const dispatch = useDispatch();
+  const [updateShoppingCart] = useUpdateShoppingCartMutation();
+
     const shoppingCartFromStore : cartItemModel[] = useSelector(
         (state : RootState) => state.shoppingCartStore.cartItems ?? []
     )
@@ -11,6 +16,27 @@ const CartSummary = () => {
         return(
             <div>Shopping Cart Is Empty!</div>
         )
+    }
+
+    const handleQuantity = (updateQuantityby: number, cartItem: cartItemModel) => {
+      if((updateQuantityby == -1 && cartItem.quantity == 1) || updateQuantityby == 0 ) {
+        // remove from cart
+        updateShoppingCart({
+          productItemId: cartItem.productItem?.id,
+          updateQuantityBy: 0,
+          userId:"9d6a4d87-b61c-4452-8873-29c1d274367e"
+        })
+        dispatch(removeFromCart({cartItem, quantity: 0}))
+      }
+      else {
+        // update quantity
+        updateShoppingCart({
+          productItemId: cartItem.productItem?.id,
+          updateQuantityBy: updateQuantityby,
+          userId:"9d6a4d87-b61c-4452-8873-29c1d274367e"
+        })
+        dispatch(updateQuantity({cartItem, quantity: cartItem.quantity! + updateQuantityby}));
+      }
     }
 
     return (
@@ -48,17 +74,17 @@ const CartSummary = () => {
               }}
             >
               <span style={{ color: "rgba(22,22,22,.7)" }} role="button">
-                <i className="bi bi-dash-circle-fill"></i>
+                <i className="bi bi-dash-circle-fill" onClick={() => handleQuantity(-1,cartItem)}></i>
               </span>
               <span>
                 <b>{cartItem.quantity}</b>
               </span>
               <span style={{ color: "rgba(22,22,22,.7)" }} role="button">
-                <i className="bi bi-plus-circle-fill"></i>
+                <i className="bi bi-plus-circle-fill" onClick={() => handleQuantity(1, cartItem)}></i>
               </span>
             </div>
 
-            <button className="btn btn-danger mx-1">Remove</button>
+            <button className="btn btn-danger mx-1" onClick={() => handleQuantity(0, cartItem)}>Remove</button>
           </div>
         </div>
       </div>
