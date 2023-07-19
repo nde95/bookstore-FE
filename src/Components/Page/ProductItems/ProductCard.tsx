@@ -2,6 +2,7 @@ import { productsModel } from "../../../Interfaces";
 import { Link } from "react-router-dom"
 import { useState } from "react";
 import { useUpdateShoppingCartMutation } from "../../../APIs/shoppingCartAPI";
+import { MiniLoader } from "../Common";
 
 
 
@@ -22,8 +23,6 @@ const ProductCard = (props: Props) => {
       updateQuantityBy:1, 
       userId:'9d6a4d87-b61c-4452-8873-29c1d274367e'
     });
-
-    console.log(response);
 
     setIsAddingToCart(false);
   }
@@ -63,21 +62,33 @@ const ProductCard = (props: Props) => {
         </i>
         )}
 
-          {/* add to cart button */}
-          <i
-            className="bi bi-cart-plus btn btn-outline-danger"
-            style={{
-              position: "absolute",
-              top: "15px",
-              right: "15px",
-              padding: "5px 10px",
-              borderRadius: "3px",
-              outline: "none !important",
-              cursor: "pointer",
-            }}
-            onClick={() => handleAddToCart(props.productItem.id)}
-          ></i>
-
+            {/* add to cart button and loader  */}
+          {isAddingToCart ? (
+          <>
+          <div style={{
+            position: "absolute",
+            top: "15px",
+            right: "15px",
+          }}>
+            <MiniLoader />
+          </div>
+          </>
+            ) : (
+            <i
+              className="bi bi-cart-plus btn btn-outline-danger"
+              style={{
+                position: "absolute",
+                top: "15px",
+                right: "15px",
+                padding: "5px 10px",
+                borderRadius: "3px",
+                outline: "none !important",
+                cursor: "pointer",
+              }}
+              onClick={() => handleAddToCart(props.productItem.id)}
+            ></i>
+            )}
+          
           <div className="text-center">
           <Link to={`/ProductDetails/${props.productItem.id}`} style={{ textDecoration: "none" }}>
             <p className="card-title m-0 text-success fs-3">{props.productItem.name}</p>
