@@ -12,7 +12,7 @@ export const shoppingCartSlice = createSlice({
         setShoppingCart: (state, action) => {
             state.cartItems = action.payload;
         },
-        updateQuantityby: (state, action) => {
+        updateQuantity: (state, action) => {
            state.cartItems =  state.cartItems?.map((item) => {
             if(item.id === action.payload.cartItem.id){
                 item.quantity = action.payload.quantity;
@@ -31,5 +31,5 @@ export const shoppingCartSlice = createSlice({
     },
 });
 
-export const { setShoppingCart, updateQuantityby, removeFromCart } = shoppingCartSlice.actions;
+export const { setShoppingCart, updateQuantity, removeFromCart } = shoppingCartSlice.actions;
 export const shoppingCartReducer = shoppingCartSlice.reducer;
