@@ -1,11 +1,34 @@
 import { productsModel } from "../../../Interfaces";
 import { Link } from "react-router-dom"
+import { useState } from "react";
+import { useUpdateShoppingCartMutation } from "../../../APIs/shoppingCartAPI";
+
+
 
 interface Props {
     productItem: productsModel;
 }
 
 const ProductCard = (props: Props) => {
+  const [isAddingToCart, setIsAddingToCart] = useState<boolean>(false);
+  const [updateShoppingCart] = useUpdateShoppingCartMutation();
+
+
+  const handleAddToCart = async (productItemId: number, ) => {
+    setIsAddingToCart(true);
+   
+    const response = await updateShoppingCart({
+      productItemId:productItemId, 
+      updateQuantityBy:1, 
+      userId:'9d6a4d87-b61c-4452-8873-29c1d274367e'
+    });
+
+    console.log(response);
+
+    setIsAddingToCart(false);
+  }
+
+
     return (
         <div className="col-md-4 col-12 p-4">
       <div
@@ -40,7 +63,7 @@ const ProductCard = (props: Props) => {
         </i>
         )}
 
-
+          {/* add to cart button */}
           <i
             className="bi bi-cart-plus btn btn-outline-danger"
             style={{
@@ -52,6 +75,7 @@ const ProductCard = (props: Props) => {
               outline: "none !important",
               cursor: "pointer",
             }}
+            onClick={() => handleAddToCart(props.productItem.id)}
           ></i>
 
           <div className="text-center">
