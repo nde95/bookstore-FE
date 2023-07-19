@@ -3,8 +3,10 @@ import { cartItemModel } from "../../../Interfaces";
 import { RootState } from "../../../Storage/Redux/store";
 import { InputHelper } from "../../../Helper";
 import { useState } from "react";
+import { MiniLoader } from "../Common";
 
 const UserDetails = () => {
+  const [loading, isLoading] = useState(false);
   const shoppingCartFromStore : cartItemModel[] = useSelector(
     (state : RootState) => state.shoppingCartStore.cartItems ?? []
 );
@@ -29,13 +31,18 @@ const UserDetails = () => {
     setUserInput(tempData);
   }
 
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    isLoading(true);
+  }
+
     return (
         <div className="border pb-5 pt-3">
         <h1 style={{ fontWeight: "300" }} className="text-center text-success">
           Pickup Details
         </h1>
         <hr />
-        <form className="col-10 mx-auto">
+        <form onSubmit={handleSubmit} className="col-10 mx-auto">
           <div className="form-group mt-3">
             Name
             <input
@@ -81,9 +88,10 @@ const UserDetails = () => {
           </div>
           <button
             type="submit"
-            className="btn btn-lg btn-success form-control mt-3"
+            className="btn btn-lg btn-success form-control mt-3" disabled={loading}
           >
-            Place Order
+            {loading ? <MiniLoader /> : "Place Order"}
+
           </button>
         </form>
       </div>
