@@ -3,6 +3,7 @@ import { useGetProductItemByIdQuery } from "../APIs/productItemAPI";
 import { Link } from "react-router-dom";
 import { useState } from "react";
 import { useUpdateShoppingCartMutation } from "../APIs/shoppingCartAPI";
+import { MainLoader } from "../Components/Page/Common";
 
 // TEST USER ID: 9d6a4d87-b61c-4452-8873-29c1d274367e
 
@@ -109,7 +110,7 @@ const ProductDetails = () => {
         </>
         ) : (
           <div className="d-flex justify-content-center" style={{ width: "100%" }}>
-            <div>Loading, Please Wait...</div>
+            <MainLoader />
           </div>
         )}
 
