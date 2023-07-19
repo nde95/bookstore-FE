@@ -3,7 +3,7 @@ import { useGetProductItemByIdQuery } from "../APIs/productItemAPI";
 import { Link } from "react-router-dom";
 import { useState } from "react";
 import { useUpdateShoppingCartMutation } from "../APIs/shoppingCartAPI";
-import { MainLoader } from "../Components/Page/Common";
+import { MainLoader, MiniLoader } from "../Components/Page/Common";
 
 // TEST USER ID: 9d6a4d87-b61c-4452-8873-29c1d274367e
 
@@ -84,11 +84,18 @@ const ProductDetails = () => {
             </span>
             <div className="row pt-4">
               <div className="col-5">
+                {isAddingToCart? (
+                  <button disabled className="btn btn-success form-control">
+                    <MiniLoader />
+                  </button>
+                ) : (      
                 <button 
                 className="btn btn-success form-control" 
                 onClick={() => handleAddToCart(data.result?.id)}>
                   Add to Cart
                 </button>
+                )}
+
               </div>
   
               <div className="col-5 ">
