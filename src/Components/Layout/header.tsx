@@ -1,5 +1,5 @@
 import { useSelector } from "react-redux";
-import { cartItemModel } from "../../Interfaces";
+import { cartItemModel, userModel } from "../../Interfaces";
 import Logo from "../../assets/nde-alt.png";
 import {NavLink} from "react-router-dom";
 import { RootState } from "../../Storage/Redux/store";
@@ -9,6 +9,8 @@ const Header = () => {
   const shoppingCartFromStore : cartItemModel[] = useSelector(
     (state : RootState) => state.shoppingCartStore.cartItems ?? []
 )
+
+    const userData : userModel = useSelector((state: RootState) => state.authStore);
 
     return (
         <div><nav className="navbar navbar-expand-lg bg-dark navbar-dark">
@@ -41,38 +43,64 @@ const Header = () => {
                 </ul>
               </li>
               <div className="d-flex" style={{ marginLeft: "auto" }}>
-                <li className="nav-item">
-                  <button 
-                  className="btn btn-success btn-outlined rounded-pill text-white mx-2"
-                  style={{
-                    border: "none",
-                    height: "40px",
-                    width: "100px",
-                  }}
-                  >
-                    Logout
-                  </button>
-                </li>
-                <li className="nav-item text-white">
-                  <NavLink className="btn btn-success btn-outlined rounded-pill text-white mx-2"
-                  style={{
-                    border: "none",
-                    height: "40px",
-                    width: "100px",
-                  }} to="/Login">
-                    Login 
-                  </NavLink>
-                </li>
-                <li className="nav-item text-white">
-                  <NavLink className="btn btn-success btn-outlined rounded-pill text-white mx-2"
-                  style={{
-                    border: "none",
-                    height: "40px",
-                    width: "100px",
-                  }} to="/Register">
-                    Register 
-                  </NavLink>
-                </li>
+
+
+                {/* authenticated user  */}
+                {userData.id && (
+                <>
+                  <li className="nav-item">
+                    <button className="nav-link active"
+                    style={{
+                      userSelect: "none",
+                      background: "transparent",
+                      border: 0,
+                    }}
+                    >
+                      Welcome, {userData.fullName}
+                    </button>
+                  </li>
+
+                  <li className="nav-item">
+                    <button 
+                    className="btn btn-success btn-outlined rounded-pill text-white mx-2"
+                    style={{
+                      border: "none",
+                      height: "40px",
+                      width: "100px",
+                    }}
+                    >
+                      Logout
+                    </button>
+                  </li>
+                </>
+                )}
+
+                {/* login and register for not auth  */}
+                {!userData.id && (
+                <>
+                  <li className="nav-item text-white">
+                    <NavLink className="btn btn-success btn-outlined rounded-pill text-white mx-2"
+                    style={{
+                      border: "none",
+                      height: "40px",
+                      width: "100px",
+                    }} to="/Login">
+                      Login 
+                    </NavLink>
+                  </li>
+                  <li className="nav-item text-white">
+                    <NavLink className="btn btn-success btn-outlined rounded-pill text-white mx-2"
+                    style={{
+                      border: "none",
+                      height: "40px",
+                      width: "100px",
+                    }} to="/Register">
+                      Register 
+                    </NavLink>
+                  </li>
+                </>
+                )}
+                
               </div>
             </ul>
           </div>
