@@ -1,16 +1,26 @@
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { cartItemModel, userModel } from "../../Interfaces";
 import Logo from "../../assets/nde-alt.png";
-import {NavLink} from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { RootState } from "../../Storage/Redux/store";
+import { emptyUserState, setLoggedInUser } from "../../Storage/Redux/authSlice";
 
 
 const Header = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
   const shoppingCartFromStore : cartItemModel[] = useSelector(
     (state : RootState) => state.shoppingCartStore.cartItems ?? []
 )
 
     const userData : userModel = useSelector((state: RootState) => state.authStore);
+
+    const handleLogout = () => {
+      localStorage.removeItem("token");
+      dispatch(setLoggedInUser({...emptyUserState}))
+      navigate("/");
+    }
 
     return (
         <div><nav className="navbar navbar-expand-lg bg-dark navbar-dark">
@@ -68,6 +78,7 @@ const Header = () => {
                       height: "40px",
                       width: "100px",
                     }}
+                    onClick={handleLogout}
                     >
                       Logout
                     </button>
