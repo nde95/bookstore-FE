@@ -1,10 +1,12 @@
-import { apiResponse, productsModel } from "../../../Interfaces";
+import { apiResponse, productsModel, userModel } from "../../../Interfaces";
 import { Link } from "react-router-dom"
 import { useState } from "react";
 import { useUpdateShoppingCartMutation } from "../../../APIs/shoppingCartAPI";
 import { MiniLoader } from "../Common";
 import { toastNotify } from "../../../Helper";
-
+import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { RootState } from "../../../Storage/Redux/store";
 
 
 interface Props {
@@ -14,9 +16,14 @@ interface Props {
 const ProductCard = (props: Props) => {
   const [isAddingToCart, setIsAddingToCart] = useState<boolean>(false);
   const [updateShoppingCart] = useUpdateShoppingCartMutation();
-
+  const userData : userModel = useSelector((state: RootState) => state.authStore);
+  const navigate = useNavigate();
 
   const handleAddToCart = async (productItemId: number, ) => {
+    if (!userData.id) {
+      navigate("/Login")
+    }
+
     setIsAddingToCart(true);
    
     const response: apiResponse = await updateShoppingCart({
@@ -30,7 +37,7 @@ const ProductCard = (props: Props) => {
 
     setIsAddingToCart(false);
   }
-
+ 
 
     return (
         <div className="col-md-4 col-12 p-4">

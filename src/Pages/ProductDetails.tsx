@@ -4,9 +4,11 @@ import { Link } from "react-router-dom";
 import { useState } from "react";
 import { useUpdateShoppingCartMutation } from "../APIs/shoppingCartAPI";
 import { MainLoader, MiniLoader } from "../Components/Page/Common";
-import { apiResponse } from "../Interfaces";
+import { apiResponse, userModel } from "../Interfaces";
 import { toastNotify } from "../Helper";
-
+import { useSelector } from "react-redux";
+import { RootState } from "../Storage/Redux/store";
+import { useNavigate } from "react-router-dom";
 // TEST USER ID: 9d6a4d87-b61c-4452-8873-29c1d274367e
 
 const ProductDetails = () => {
@@ -15,8 +17,11 @@ const ProductDetails = () => {
     const [quantity, setQuantity] = useState(1);
     const [isAddingToCart, setIsAddingToCart] = useState<boolean>(false);
     const [updateShoppingCart] = useUpdateShoppingCartMutation();
+    const userData : userModel = useSelector((state: RootState) => state.authStore);
+    const navigate = useNavigate();
 
     const handleQuantity = (counter: number) => {
+
       let newQuantity = quantity + counter
       if (newQuantity == 0){
         newQuantity = 1;
@@ -26,6 +31,9 @@ const ProductDetails = () => {
     };
 
     const handleAddToCart = async (productItemId: number, ) => {
+      if (!userData.id) {
+        navigate("/Login")
+      }
       setIsAddingToCart(true);
      
       const response : apiResponse = await updateShoppingCart({

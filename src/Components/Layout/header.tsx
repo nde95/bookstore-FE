@@ -39,7 +39,7 @@ const Header = () => {
               <li className="nav-item">
                 <NavLink className="nav-link" aria-current="page" to="/ShoppingCart">
                   <i className="bi bi-cart"></i> {"  "}
-                  {shoppingCartFromStore?.length? `(${shoppingCartFromStore.length})` : ""}
+                  {userData.id && `${shoppingCartFromStore.length}`}
                 </NavLink>
               </li>
               <li className="nav-item dropdown">
