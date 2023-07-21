@@ -4,5 +4,6 @@ import ProductDetails from "./ProductDetails"
 import ShoppingCart from "./ShoppingCart"
 import Login from "./Login"
 import Register from "./Register"
+import AccessDenied from "./AccessDenied"
 
-export {Home, ShoppingCart, NotFound, ProductDetails, Login, Register}
+export {Home, ShoppingCart, AccessDenied, NotFound, ProductDetails, Login, Register}
