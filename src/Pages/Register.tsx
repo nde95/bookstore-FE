@@ -1,11 +1,13 @@
 import React, { useState } from "react";
-import { InputHelper } from "../Helper";
+import { InputHelper, toastNotify } from "../Helper";
 import { useRegisterUserMutation } from "../APIs/authAPI";
 import { apiResponse } from "../Interfaces";
+import { useNavigate } from "react-router-dom";
 
 const Register = () => {
   const [registerUser] = useRegisterUserMutation();
   const [loading, isLoading] = useState(false);
+  const navigate = useNavigate();
   const [userInput, setUserInput] = useState({
     userName: "",
     password: "",
@@ -28,9 +30,10 @@ const Register = () => {
       name: userInput.name,
     });
     if(response.data){
-      console.log(response.data);
+      toastNotify("Account created successfully! Please login to continue.")
+      navigate("/Login");
     } else if (response.error) {
-      console.log(response.error.data.errorMessages[0]);
+      toastNotify(response.error.data.errorMessages[0], "error");
     }
 
 

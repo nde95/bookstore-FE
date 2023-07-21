@@ -1,3 +1,3 @@
 import InputHelper from "./inputHelper";
-
-export { InputHelper }
+import toastNotify from "./toastNotify";
+export { InputHelper, toastNotify }
