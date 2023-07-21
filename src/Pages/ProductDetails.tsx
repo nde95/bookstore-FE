@@ -9,7 +9,7 @@ import { toastNotify } from "../Helper";
 import { useSelector } from "react-redux";
 import { RootState } from "../Storage/Redux/store";
 import { useNavigate } from "react-router-dom";
-// TEST USER ID: 9d6a4d87-b61c-4452-8873-29c1d274367e
+
 
 const ProductDetails = () => {
     const { productItemId } = useParams();
@@ -39,7 +39,7 @@ const ProductDetails = () => {
       const response : apiResponse = await updateShoppingCart({
         productItemId:productItemId, 
         updateQuantityBy:quantity, 
-        userId:'9d6a4d87-b61c-4452-8873-29c1d274367e'
+        userId: userData.id,
       });
 
       if (response.data && response.data.isSuccess) {

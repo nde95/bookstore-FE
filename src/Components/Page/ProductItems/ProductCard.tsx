@@ -29,7 +29,7 @@ const ProductCard = (props: Props) => {
     const response: apiResponse = await updateShoppingCart({
       productItemId:productItemId, 
       updateQuantityBy:1, 
-      userId:'9d6a4d87-b61c-4452-8873-29c1d274367e'
+      userId: userData.id,
     });
     if (response.data && response.data.isSuccess) {
       toastNotify("Item added to cart!");

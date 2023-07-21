@@ -1,5 +1,5 @@
 import { useSelector, useDispatch } from "react-redux"
-import { cartItemModel } from "../../../Interfaces"
+import { cartItemModel, userModel } from "../../../Interfaces"
 import { RootState } from "../../../Storage/Redux/store";
 import { removeFromCart, updateQuantity} from "../../../Storage/Redux/shoppingCartSlice";
 import { useUpdateShoppingCartMutation } from "../../../APIs/shoppingCartAPI";
@@ -7,6 +7,7 @@ import { useUpdateShoppingCartMutation } from "../../../APIs/shoppingCartAPI";
 const CartSummary = () => {
   const dispatch = useDispatch();
   const [updateShoppingCart] = useUpdateShoppingCartMutation();
+  const userData : userModel = useSelector((state: RootState) => state.authStore);
 
     const shoppingCartFromStore : cartItemModel[] = useSelector(
         (state : RootState) => state.shoppingCartStore.cartItems ?? []
@@ -24,7 +25,7 @@ const CartSummary = () => {
         updateShoppingCart({
           productItemId: cartItem.productItem?.id,
           updateQuantityBy: 0,
-          userId:"9d6a4d87-b61c-4452-8873-29c1d274367e"
+          userId: userData.id,
         })
         dispatch(removeFromCart({cartItem, quantity: 0}))
       }
@@ -33,7 +34,7 @@ const CartSummary = () => {
         updateShoppingCart({
           productItemId: cartItem.productItem?.id,
           updateQuantityBy: updateQuantityby,
-          userId:"9d6a4d87-b61c-4452-8873-29c1d274367e"
+          userId: userData.id,
         })
         dispatch(updateQuantity({cartItem, quantity: cartItem.quantity! + updateQuantityby}));
       }

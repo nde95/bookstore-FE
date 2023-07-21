@@ -3,18 +3,21 @@ import { Header, Footer } from './Components/Layout';
 import { AccessDenied, Home, Login, NotFound, ProductDetails, Register, ShoppingCart } from './Pages';
 import { Routes, Route } from "react-router-dom"
 import { useEffect } from "react";
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useGetShoppingCartQuery } from './APIs/shoppingCartAPI';
 import { setShoppingCart } from './Storage/Redux/shoppingCartSlice';
 import { userModel } from './Interfaces';
 import jwt_decode from "jwt-decode";
 import { setLoggedInUser } from './Storage/Redux/authSlice';
+import { RootState } from './Storage/Redux/store';
 
 
 function App() {
   const dispatch = useDispatch();
+  const userData : userModel = useSelector((state: RootState) => state.authStore);
 
-  const { data, isLoading } = useGetShoppingCartQuery("9d6a4d87-b61c-4452-8873-29c1d274367e");
+
+  const { data, isLoading } = useGetShoppingCartQuery(userData.id);
 
   useEffect(() => {
     const localToken = localStorage.getItem("token");
