@@ -1,15 +1,18 @@
 import { useSelector } from "react-redux";
-import { cartItemModel } from "../../../Interfaces";
+import { apiResponse, cartItemModel } from "../../../Interfaces";
 import { RootState } from "../../../Storage/Redux/store";
 import { InputHelper } from "../../../Helper";
 import { useState } from "react";
 import { MiniLoader } from "../Common";
+import { useInitiatePaymentMutation } from "../../../APIs/paymentAPI";
+import { useNavigate } from "react-router-dom";
 
 const UserDetails = () => {
   const [loading, isLoading] = useState(false);
   const shoppingCartFromStore : cartItemModel[] = useSelector(
     (state : RootState) => state.shoppingCartStore.cartItems ?? []
 );
+const navigate = useNavigate();
 const userData = useSelector((state: RootState) => state.authStore);
   let subTotal = 0;
   let totalItems = 0;
@@ -27,6 +30,7 @@ const userData = useSelector((state: RootState) => state.authStore);
   })
 
   const [userInput, setUserInput] = useState(initialUserData);
+  const [initiatePayment] = useInitiatePaymentMutation();
   const handleUserInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     const tempData = InputHelper(e, userInput)
     setUserInput(tempData);
@@ -35,7 +39,12 @@ const userData = useSelector((state: RootState) => state.authStore);
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     isLoading(true);
-  }
+
+    const {data} : apiResponse = await initiatePayment(userData.id);
+    navigate("/payment", {
+      state: {apiResult: data?.result, userInput},
+    });
+  };
 
     return (
         <div className="border pb-5 pt-3">
