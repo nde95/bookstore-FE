@@ -15,7 +15,7 @@ const OrderSummary = ({data, userInput}: orderSummaryProps) => {
         <div className="p-3">
             {data.cartItems.map((cartItem: cartItemModel, index:number) => {
                  return(
-                    <div className="d-flex">
+                    <div className="d-flex" key={index}>
                     <div className="d-flex w-100 justify-content-between">
                     <p>{cartItem.productItem?.name}</p>
                     <p>${cartItem.productItem?.price} x {cartItem.quantity} =</p>
