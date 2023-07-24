@@ -6,5 +6,6 @@ import Login from "./Login"
 import Register from "./Register"
 import AccessDenied from "./AccessDenied"
 import Payment from "./Payment"
+import OrderConfirmed from "./Order/OrderConfirmed"
 
-export {Home, ShoppingCart, Payment, AccessDenied, NotFound, ProductDetails, Login, Register}
+export {Home, ShoppingCart, OrderConfirmed, Payment, AccessDenied, NotFound, ProductDetails, Login, Register}
