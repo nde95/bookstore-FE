@@ -28,7 +28,7 @@ const MyOrders = () => {
           </div>
           {data.result.map((orderItem: orderHeader) => {
         return (
-            <div className="row border">
+            <div className="row border" key={orderItem.orderHeaderId}>
             <div className="col-1">{orderItem.orderHeaderId}</div>
             <div className="col-3">{orderItem.pickupName}</div>
             <div className="col-2">{orderItem.pickupPhoneNumber}</div>
