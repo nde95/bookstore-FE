@@ -64,7 +64,7 @@ const CartSummary = () => {
             <h4>${(cartItem.quantity! * cartItem.productItem!.price).toFixed(2)}</h4>
           </div>
           <div className="flex-fill">
-            <h4 className="text-danger">${cartItem.productItem?.price}</h4>
+            <h4 className="text-danger">${cartItem.productItem?.price.toFixed(2)}</h4>
           </div>
           <div className="d-flex justify-content-between">
             <div
