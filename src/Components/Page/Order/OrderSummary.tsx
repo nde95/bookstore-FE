@@ -99,9 +99,15 @@ const OrderSummary = ({ data, userInput }: orderSummaryProps) => {
             </button>
             {userData.role == SD_Roles.ADMIN && (
               <div className="d-flex">
-                <button className="btn btn-danger mx-2" onClick={handleCancel}>
-                  Cancel
-                </button>
+                {data.status! !== SD_Status.CANCELLED &&
+                  data.status! !== SD_Status.DELIVERED && (
+                    <button
+                      className="btn btn-danger mx-2"
+                      onClick={handleCancel}
+                    >
+                      Cancel
+                    </button>
+                  )}
                 <button
                   className={`btn btn-${nextStatus.color}`}
                   onClick={handleNextStatus}
