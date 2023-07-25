@@ -1,6 +1,6 @@
 import './App.css';
 import { Header, Footer } from './Components/Layout';
-import { AccessDenied, Home, Login, MyOrders, NotFound, OrderConfirmed, Payment, ProductDetails, Register, ShoppingCart } from './Pages';
+import { AccessDenied, Home, Login, MyOrders, NotFound, OrderConfirmed, OrderDetailsPage, Payment, ProductDetails, Register, ShoppingCart } from './Pages';
 import { Routes, Route } from "react-router-dom"
 import { useEffect } from "react";
 import { useDispatch, useSelector } from 'react-redux';
@@ -49,6 +49,7 @@ function App() {
           <Route path="/payment" element={<Payment />}></Route>
           <Route path="order/orderconfirmed/:id" element={<OrderConfirmed />}></Route>
           <Route path='/order/myorders' element={<MyOrders />}></Route>
+          <Route path='/order/orderDetails/:id' element={<OrderDetailsPage />}></Route>
           <Route path='/accessDenied' element={<AccessDenied />}></Route>
         </Routes>
       </div>
