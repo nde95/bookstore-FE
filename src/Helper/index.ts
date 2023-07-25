@@ -1,3 +1,4 @@
 import InputHelper from "./inputHelper";
 import toastNotify from "./toastNotify";
-export { InputHelper, toastNotify }
+import getStatusColor from "./getStatusColor";
+export { InputHelper, toastNotify, getStatusColor };
