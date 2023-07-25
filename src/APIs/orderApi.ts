@@ -29,10 +29,10 @@ const orderApi = createApi({
         }),
         getOrderDetails: builder.query({
             query: (id) => ({
-                url:`order/${id}`
+              url: `order/${id}`,
             }),
-            providesTags:["Orders"]
-        }),
+            providesTags: ["Orders"],
+          }),
     }),
 });
 
