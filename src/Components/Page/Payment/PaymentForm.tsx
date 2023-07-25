@@ -66,9 +66,9 @@ const PaymentForm = ({ data, userInput }: orderSummaryProps) => {
             ? SD_Status.CONFIRMED
             : SD_Status.PENDING,
       });
-      console.log(response)
+
       if (response) {
-        console.log(response)
+
         if (response.data?.result.status === SD_Status.CONFIRMED) {
           navigate(
             `/order/orderConfirmed/${response.data.result.orderHeaderId}`
