@@ -1,14 +1,15 @@
 import { MainLoader } from "../../Components/Page/Common";
+import { getStatusColor } from "../../Helper";
 import { orderHeader } from "../../Interfaces";
 import OrderListProps from "./orderListType";
 import { useNavigate } from "react-router-dom";
 
-const OrderList = ({isLoading, orderData}: OrderListProps) => {
-  const navigate = useNavigate(); 
+const OrderList = ({ isLoading, orderData }: OrderListProps) => {
+  const navigate = useNavigate();
 
-  return(
-        <>
- {isLoading && <MainLoader />}
+  return (
+    <>
+      {isLoading && <MainLoader />}
       {!isLoading && (
         <div className="table px-5">
           <div className="p-2">
@@ -23,7 +24,7 @@ const OrderList = ({isLoading, orderData}: OrderListProps) => {
               <div className="col-1"></div>
             </div>
             {orderData.map((orderItem: orderHeader) => {
-
+              const badgeColor = getStatusColor(orderItem.status!);
               return (
                 <div className="row border" key={orderItem.orderHeaderId}>
                   <div className="col-1">{orderItem.orderHeaderId}</div>
@@ -37,6 +38,9 @@ const OrderList = ({isLoading, orderData}: OrderListProps) => {
                     {new Date(orderItem.orderDate!).toLocaleDateString()}
                   </div>
                   <div className="col-2">
+                    <span className={`badge bg-${badgeColor}`}>
+                      {orderItem.status}
+                    </span>
                   </div>
                   <div className="col-1">
                     <button
@@ -56,8 +60,8 @@ const OrderList = ({isLoading, orderData}: OrderListProps) => {
           </div>
         </div>
       )}
-        </>
-    )
-}
+    </>
+  );
+};
 
 export default OrderList;
