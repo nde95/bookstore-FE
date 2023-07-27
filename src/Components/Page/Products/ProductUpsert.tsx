@@ -1,7 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { InputHelper, toastNotify } from "../../../Helper";
-import { useCreateProductItemMutation } from "../../../APIs/productItemAPI";
-import { useNavigate } from "react-router-dom";
+import {
+  useCreateProductItemMutation,
+  useGetProductItemByIdQuery,
+  useUpdateProductItemMutation,
+} from "../../../APIs/productItemAPI";
+import { useNavigate, useParams } from "react-router-dom";
 import { MainLoader } from "../Common";
 
 const productItemData = {
@@ -13,12 +17,31 @@ const productItemData = {
 };
 
 const ProductUpsert = () => {
+  const { id } = useParams();
+
   const [imageToBeStored, setImageToBeStored] = useState<any>();
   const [imageToDisplay, setImageToDisplay] = useState<string>("");
   const [productItemInputs, setProductItemInputs] = useState(productItemData);
   const [loading, isLoading] = useState(false);
   const [createNewProduct] = useCreateProductItemMutation();
+  const [updateProductEntry] = useUpdateProductItemMutation();
   const navigate = useNavigate();
+
+  const { data } = useGetProductItemByIdQuery(id);
+
+  useEffect(() => {
+    if (data && data.result) {
+      const tempData = {
+        name: data.result.name,
+        description: data.result.description,
+        specialTag: data.result.specialTag,
+        category: data.result.category,
+        price: data.result.price,
+      };
+      setProductItemInputs(tempData);
+      setImageToDisplay(data.result.image);
+    }
+  }, [data]);
 
   const handleProductItemInputs = (
     e: React.ChangeEvent<
@@ -63,7 +86,7 @@ const ProductUpsert = () => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     isLoading(true);
-    if (!imageToBeStored) {
+    if (!imageToBeStored && !id) {
       toastNotify("Please choose an image to upload", "error");
       isLoading(false);
       return;
@@ -76,9 +99,20 @@ const ProductUpsert = () => {
     formData.append("SpecialTag", productItemInputs.specialTag);
     formData.append("Category", productItemInputs.category);
     formData.append("Price", productItemInputs.price);
-    formData.append("File", imageToBeStored);
+    if (imageToDisplay) formData.append("File", imageToBeStored);
 
-    const response = await createNewProduct(formData);
+    let response;
+    if (id) {
+      //update
+      formData.append("Id", id);
+      response = await updateProductEntry({ data: formData, id });
+      toastNotify("Menu Item updated successfully", "success");
+    } else {
+      //create new
+      response = await createNewProduct(formData);
+      toastNotify("New product created successfully", "success");
+    }
+
     if (response) {
       isLoading(false);
       navigate("/products/productlist");
@@ -90,7 +124,9 @@ const ProductUpsert = () => {
   return (
     <div className="container border mt-5 p-5 bg-light">
       {loading && <MainLoader />}
-      <h3 className="offset-2 px-2 text-success">Add Product</h3>
+      <h3 className="offset-2 px-2 text-success">
+        {id ? "Edit Product" : "Add Product"}
+      </h3>
       <form method="post" encType="multipart/form-data" onSubmit={handleSubmit}>
         <div className="row mt-3">
           <div className="col-md-7">
@@ -147,7 +183,7 @@ const ProductUpsert = () => {
                   type="submit"
                   className="btn btn-success mt-5 form-control"
                 >
-                  Submit
+                  {id ? "Update" : "Create Product Listing"}
                 </button>
               </div>
               <div className="col-6">
