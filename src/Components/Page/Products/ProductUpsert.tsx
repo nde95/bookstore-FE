@@ -141,14 +141,23 @@ const ProductUpsert = () => {
               onChange={handleFileChange}
               className="form-control mt-3"
             />
-            <div className="text-center">
-              <button
-                type="submit"
-                style={{ width: "50%" }}
-                className="btn btn-success mt-5"
-              >
-                Submit
-              </button>
+            <div className="row">
+              <div className="col-6">
+                <button
+                  type="submit"
+                  className="btn btn-success mt-5 form-control"
+                >
+                  Submit
+                </button>
+              </div>
+              <div className="col-6">
+                <a
+                  onClick={() => navigate(-1)}
+                  className="btn btn-secondary form-control mt-5"
+                >
+                  Back to List
+                </a>
+              </div>
             </div>
           </div>
           <div className="col-md-5 text-center">
