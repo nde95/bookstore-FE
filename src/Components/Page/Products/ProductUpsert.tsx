@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { InputHelper, toastNotify } from "../../../Helper";
+import { useCreateProductItemMutation } from "../../../APIs/productItemAPI";
+import { useNavigate } from "react-router-dom";
 
 const productItemData = {
   name: "",
@@ -13,6 +15,9 @@ const ProductUpsert = () => {
   const [imageToBeStored, setImageToBeStored] = useState<any>();
   const [imageToDisplay, setImageToDisplay] = useState<string>("");
   const [productItemInputs, setProductItemInputs] = useState(productItemData);
+  const [loading, isLoading] = useState(false);
+  const [createNewProduct] = useCreateProductItemMutation();
+  const navigate = useNavigate();
 
   const handleProductItemInputs = (
     e: React.ChangeEvent<
@@ -54,10 +59,37 @@ const ProductUpsert = () => {
     }
   };
 
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    isLoading(true);
+    if (!imageToBeStored) {
+      toastNotify("Please choose an image to upload", "error");
+      isLoading(false);
+      return;
+    }
+
+    const formData = new FormData();
+
+    formData.append("Name", productItemInputs.name);
+    formData.append("Description", productItemInputs.description);
+    formData.append("SpecialTag", productItemInputs.specialTag);
+    formData.append("Category", productItemInputs.category);
+    formData.append("Price", productItemInputs.price);
+    formData.append("File", imageToBeStored);
+
+    const response = await createNewProduct(formData);
+    if (response) {
+      isLoading(false);
+      navigate("/products/productlist");
+    }
+
+    isLoading(false);
+  };
+
   return (
     <div className="container border mt-5 p-5">
       <h3 className="offset-2 px-2 text-success">Add Product</h3>
-      <form method="post" encType="multipart/form-data">
+      <form method="post" encType="multipart/form-data" onSubmit={handleSubmit}>
         <div className="row mt-3">
           <div className="col-md-5 offset-2">
             <input
