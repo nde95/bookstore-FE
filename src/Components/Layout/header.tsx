@@ -75,10 +75,12 @@ const Header = () => {
                     >
                       All Orders
                     </li>
-                    <li>
-                      <a className="dropdown-item" href="#">
-                        Something else here
-                      </a>
+                    <li
+                      style={{ cursor: "pointer" }}
+                      className="dropdown-item"
+                      onClick={() => navigate("/products/productlist")}
+                    >
+                      Current Products
                     </li>
                   </ul>
                 </li>

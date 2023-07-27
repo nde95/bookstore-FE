@@ -23,6 +23,7 @@ import { userModel } from "./Interfaces";
 import jwt_decode from "jwt-decode";
 import { setLoggedInUser } from "./Storage/Redux/authSlice";
 import { RootState } from "./Storage/Redux/store";
+import { AllProductsList } from "./Components/Page/Products";
 
 function App() {
   const dispatch = useDispatch();
@@ -67,6 +68,10 @@ function App() {
           ></Route>
           <Route path="/order/myorders" element={<MyOrders />}></Route>
           <Route path="/order/allorders" element={<AllOrders />}></Route>
+          <Route
+            path="/products/productlist"
+            element={<AllProductsList />}
+          ></Route>
           <Route
             path="/order/orderDetails/:id"
             element={<OrderDetailsPage />}
