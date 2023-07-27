@@ -1,10 +1,30 @@
-import { useGetProductItemsQuery } from "../../../APIs/productItemAPI";
+import { toast } from "react-toastify";
+import {
+  useDeleteProductItemMutation,
+  useGetProductItemsQuery,
+} from "../../../APIs/productItemAPI";
 import { productsModel } from "../../../Interfaces";
 import { MainLoader } from "../Common";
 import { useNavigate } from "react-router-dom";
 const AllProductsList = () => {
+  const [deleteProductItem] = useDeleteProductItemMutation();
   const { data, isLoading } = useGetProductItemsQuery(null);
   const navigate = useNavigate();
+
+  const handleProductDelete = async (id: number) => {
+    toast.promise(
+      deleteProductItem(id),
+      {
+        pending: "Processing your request...",
+        success: "Product deleted successfully",
+        error: "Error processing your request!",
+      },
+      {
+        theme: "dark",
+      }
+    );
+  };
+
   return (
     <>
       {isLoading && <MainLoader />}
@@ -54,7 +74,10 @@ const AllProductsList = () => {
                     >
                       <i className="bi bi-pencil-fill"></i>
                     </button>
-                    <button className="btn btn-danger mx-2">
+                    <button
+                      className="btn btn-danger mx-2"
+                      onClick={() => handleProductDelete(productItem.id)}
+                    >
                       <i className="bi bi-trash-fill"></i>
                     </button>
                   </div>
