@@ -1,3 +1,3 @@
 import AllProductsList from "./AllProductsList";
-
-export { AllProductsList };
+import ProductUpsert from "./ProductUpsert";
+export { AllProductsList, ProductUpsert };
