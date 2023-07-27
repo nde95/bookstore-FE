@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { InputHelper, toastNotify } from "../../../Helper";
 import { useCreateProductItemMutation } from "../../../APIs/productItemAPI";
 import { useNavigate } from "react-router-dom";
+import { MainLoader } from "../Common";
 
 const productItemData = {
   name: "",
@@ -87,11 +88,12 @@ const ProductUpsert = () => {
   };
 
   return (
-    <div className="container border mt-5 p-5">
+    <div className="container border mt-5 p-5 bg-light">
+      {loading && <MainLoader />}
       <h3 className="offset-2 px-2 text-success">Add Product</h3>
       <form method="post" encType="multipart/form-data" onSubmit={handleSubmit}>
         <div className="row mt-3">
-          <div className="col-md-5 offset-2">
+          <div className="col-md-7">
             <input
               type="text"
               className="form-control"
