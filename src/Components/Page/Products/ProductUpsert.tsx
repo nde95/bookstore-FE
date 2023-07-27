@@ -54,22 +54,17 @@ const ProductUpsert = () => {
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files && e.target.files[0];
-
     if (file) {
-      const imgType = file.type.split("/")[1];
+      const imgType = file.type.split("/")[1].toLowerCase();
       const validImgTypes = ["jpeg", "jpg", "png"];
-
-      const isImageTypeValid = validImgTypes.filter((e) => {
-        return e === imgType;
-      });
 
       if (file.size > 1000 * 1024) {
         setImageToBeStored("");
-        toastNotify("File must be smaller than 1 MB", "error");
+        toastNotify("File must be less than 1 MB", "error");
         return;
-      } else if (isImageTypeValid.length === 0) {
+      } else if (!validImgTypes.includes(imgType)) {
         setImageToBeStored("");
-        toastNotify("Image must be a jpeg, jpg or png format.", "error");
+        toastNotify("File must be in jpeg, jpg, or png format", "error");
         return;
       }
 
@@ -82,12 +77,11 @@ const ProductUpsert = () => {
       };
     }
   };
-
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     isLoading(true);
     if (!imageToBeStored && !id) {
-      toastNotify("Please choose an image to upload", "error");
+      toastNotify("Please upload an image", "error");
       isLoading(false);
       return;
     }
@@ -96,21 +90,22 @@ const ProductUpsert = () => {
 
     formData.append("Name", productItemInputs.name);
     formData.append("Description", productItemInputs.description);
-    formData.append("SpecialTag", productItemInputs.specialTag);
+    formData.append("SpecialTag", productItemInputs.specialTag ?? "");
     formData.append("Category", productItemInputs.category);
     formData.append("Price", productItemInputs.price);
     if (imageToDisplay) formData.append("File", imageToBeStored);
 
     let response;
+
     if (id) {
       //update
       formData.append("Id", id);
       response = await updateProductEntry({ data: formData, id });
-      toastNotify("Menu Item updated successfully", "success");
+      toastNotify("Product updated successfully", "success");
     } else {
-      //create new
+      //create
       response = await createNewProduct(formData);
-      toastNotify("New product created successfully", "success");
+      toastNotify("Product created successfully", "success");
     }
 
     if (response) {
