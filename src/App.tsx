@@ -15,7 +15,7 @@ import {
   ShoppingCart,
 } from "./Pages";
 import { Routes, Route } from "react-router-dom";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useGetShoppingCartQuery } from "./APIs/shoppingCartAPI";
 import { setShoppingCart } from "./Storage/Redux/shoppingCartSlice";
@@ -27,11 +27,14 @@ import { AllProductsList, ProductUpsert } from "./Components/Page/Products";
 
 function App() {
   const dispatch = useDispatch();
+  const [skip, setSkip] = useState(true);
   const userData: userModel = useSelector(
     (state: RootState) => state.authStore
   );
 
-  const { data, isLoading } = useGetShoppingCartQuery(userData.id);
+  const { data, isLoading } = useGetShoppingCartQuery(userData.id, {
+    skip: skip,
+  });
 
   useEffect(() => {
     const localToken = localStorage.getItem("token");
@@ -46,6 +49,10 @@ function App() {
       dispatch(setShoppingCart(data.result?.cartItems));
     }
   }, [data]);
+
+  useEffect(() => {
+    if (userData.id) setSkip(false);
+  }, [userData]);
 
   return (
     <>
