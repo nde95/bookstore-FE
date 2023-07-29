@@ -6,13 +6,22 @@ import { useDispatch, useSelector } from "react-redux";
 import { setProductItem } from "../../../Storage/Redux/productSlice";
 import { MainLoader } from "../Common";
 import { RootState } from "../../../Storage/Redux/store";
+import { SD_SortTypes } from "../../../Utils/SD";
 
 const ProductList = () => {
   const [productItems, setProductItems] = useState<productsModel[]>([]);
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [categoryList, setCategoryList] = useState([""]);
   const dispatch = useDispatch();
+  const [sortName, setSortName] = useState(SD_SortTypes.NAME_A_Z);
   const { data, isLoading } = useGetProductItemsQuery(null);
+
+  const sortOptions: Array<SD_SortTypes> = [
+    SD_SortTypes.PRICE_LOW_HIGH,
+    SD_SortTypes.PRICE_HIGH_LOW,
+    SD_SortTypes.NAME_A_Z,
+    SD_SortTypes.NAME_Z_A,
+  ];
 
   const searchValue = useSelector(
     (state: RootState) => state.productItemStore.search
@@ -20,7 +29,11 @@ const ProductList = () => {
 
   useEffect(() => {
     if (data && data.result) {
-      const tempProductsArray = handleFilters(selectedCategory, searchValue);
+      const tempProductsArray = handleFilters(
+        sortName,
+        selectedCategory,
+        searchValue
+      );
       setProductItems(tempProductsArray);
     }
   }, [searchValue]);
@@ -40,6 +53,16 @@ const ProductList = () => {
     }
   }, [isLoading]);
 
+  const handleSortClick = (i: number) => {
+    setSortName(sortOptions[i]);
+    const tempArray = handleFilters(
+      sortOptions[i],
+      selectedCategory,
+      searchValue
+    );
+    setProductItems(tempArray);
+  };
+
   const handleCategoryClick = (i: number) => {
     const buttons = document.querySelectorAll(".custom-buttons");
     let localCategory;
@@ -52,7 +75,7 @@ const ProductList = () => {
           localCategory = categoryList[index];
         }
         setSelectedCategory(localCategory);
-        const tempArray = handleFilters(localCategory, searchValue);
+        const tempArray = handleFilters(sortName, localCategory, searchValue);
         setProductItems(tempArray);
       } else {
         button.classList.remove("active");
@@ -60,7 +83,11 @@ const ProductList = () => {
     });
   };
 
-  const handleFilters = (category: string, search: string) => {
+  const handleFilters = (
+    sortType: SD_SortTypes,
+    category: string,
+    search: string
+  ) => {
     let tempProducts =
       category === "All"
         ? [...data.result]
@@ -73,6 +100,31 @@ const ProductList = () => {
       const tempSearchProducts = [...tempProducts];
       tempProducts = tempSearchProducts.filter((item: productsModel) =>
         item.name.toUpperCase().includes(search.toUpperCase())
+      );
+    }
+
+    if (sortType === SD_SortTypes.PRICE_LOW_HIGH) {
+      tempProducts.sort(
+        (a: productsModel, b: productsModel) => a.price - b.price
+      );
+    }
+    if (sortType === SD_SortTypes.PRICE_HIGH_LOW) {
+      tempProducts.sort(
+        (a: productsModel, b: productsModel) => b.price - a.price
+      );
+    }
+    if (sortType === SD_SortTypes.NAME_A_Z) {
+      tempProducts.sort(
+        (a: productsModel, b: productsModel) =>
+          a.name.toUpperCase().charCodeAt(0) -
+          b.name.toUpperCase().charCodeAt(0)
+      );
+    }
+    if (sortType === SD_SortTypes.NAME_Z_A) {
+      tempProducts.sort(
+        (a: productsModel, b: productsModel) =>
+          b.name.toUpperCase().charCodeAt(0) -
+          a.name.toUpperCase().charCodeAt(0)
       );
     }
 
@@ -99,6 +151,27 @@ const ProductList = () => {
               </button>
             </li>
           ))}
+          <li className="nav-item dropdown" style={{ marginLeft: "auto" }}>
+            <div
+              className="nav-link dropdown-toggle text-dark fs-6 border"
+              role="button"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+            >
+              {sortName}
+            </div>
+            <ul className="dropdown-menu">
+              {sortOptions.map((sortType, index) => (
+                <li
+                  key={index}
+                  onClick={() => handleSortClick(index)}
+                  className="dropdown-item"
+                >
+                  {sortType}
+                </li>
+              ))}
+            </ul>
+          </li>
         </ul>
       </div>
       {productItems.length > 0 &&
