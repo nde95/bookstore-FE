@@ -1,18 +1,22 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-    productItem: [],
+  productItem: [],
+  search: "",
 };
 
 export const productItemSlice = createSlice({
-    name: "ProductItem",
-    initialState: initialState,
-    reducers:{
-        setProductItem: (state, action) => {
-            state.productItem = action.payload;
-        },
+  name: "ProductItem",
+  initialState: initialState,
+  reducers: {
+    setProductItem: (state, action) => {
+      state.productItem = action.payload;
     },
+    setSearchItem: (state, action) => {
+      state.search = action.payload;
+    },
+  },
 });
 
-export const { setProductItem } = productItemSlice.actions;
+export const { setProductItem, setSearchItem } = productItemSlice.actions;
 export const productItemReducer = productItemSlice.reducer;
