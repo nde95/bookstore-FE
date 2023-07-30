@@ -27,14 +27,11 @@ import { AllProductsList, ProductUpsert } from "./Components/Page/Products";
 
 function App() {
   const dispatch = useDispatch();
-  const [skip, setSkip] = useState(true);
   const userData: userModel = useSelector(
     (state: RootState) => state.authStore
   );
 
-  const { data, isLoading } = useGetShoppingCartQuery(userData.id, {
-    skip: skip,
-  });
+  const { data, isLoading } = useGetShoppingCartQuery(userData.id);
 
   useEffect(() => {
     const localToken = localStorage.getItem("token");
@@ -49,10 +46,6 @@ function App() {
       dispatch(setShoppingCart(data.result?.cartItems));
     }
   }, [data]);
-
-  useEffect(() => {
-    if (userData.id) setSkip(false);
-  }, [userData]);
 
   return (
     <>
